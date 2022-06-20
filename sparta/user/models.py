@@ -69,6 +69,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
     bio = models.CharField(max_length=500)
     age = models.IntegerField()
+    birth = models.DateField()
 
     def __str__(self):
         return f'{self.user.username}님의 프로필'
