@@ -5,9 +5,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import login, logout, authenticate
 from user.serializers import UserSerializer, UserSignupSerializer
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
 class UserView(APIView):
+    @csrf_exempt
     # permission_classes = [permissions.IsAuthenticated]
 
     # 사용자 정보 조회
@@ -19,7 +22,13 @@ class UserView(APIView):
 
     # 회원가입
     def post(self, request):
-        return Response({"message": "post method!!"})
+        serializer = UserSignupSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "가입완료!!"})
+        else:
+            print(serializer.errors)
+            return Response({"message": "가입 실패!!"})
 
     # 회원 정보 수정
     def put(self, request):

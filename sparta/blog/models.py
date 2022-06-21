@@ -1,5 +1,6 @@
 from tkinter import CASCADE
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Category(models.Model):
@@ -15,6 +16,8 @@ class Article(models.Model):
     category = models.ManyToManyField(Category)
     content = models.TextField('본문')
     created_at = models.DateTimeField(auto_now_add=True)
+    exposure_start_date = models.DateField("노출 시작 일자", default=timezone.now)
+    exposure_end_date = models.DateField("노출 종료 일자", default=timezone.now)
 
     def __str__(self):
         return f'{self.title} ({self.author})'
@@ -26,4 +29,4 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'[{self.article.title}] {self.contents}'
+        return f'[{self.article.id}] {self.content} by {self.user.username}'
