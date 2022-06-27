@@ -1,16 +1,17 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import permissions, status
+
+from django.views.decorators.csrf import csrf_exempt
+
 from django.contrib.auth import login, logout, authenticate
 from user.serializers import UserSerializer, UserSignupSerializer
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
+# @csrf_exempt
 class UserView(APIView):
-    @csrf_exempt
+    
     # permission_classes = [permissions.IsAuthenticated]
 
     # 사용자 정보 조회
@@ -51,11 +52,11 @@ class UserAPIView(APIView):
             return Response({"error": "존재하지 않는 계정이거나 패스워드가 일치하지 않습니다."})
 
         login(request, user)
-        return Response({"message": "login success!!"})
+        return Response({"message": "login success!!"}, status=status.HTTP_200_OK)
 
     def delete(self, request):
         logout(request)
-        return Response({"message": "logout success!!"})
+        return Response({"message": "logout success!!"}, status=status.HTTP_200_OK)
 
 
 class UserInfoView(APIView):
